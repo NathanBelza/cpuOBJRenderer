@@ -1,0 +1,3 @@
+C:/Users/natha/Git_Projects/renderer/build/CMakeFiles/renderer.dir
+C:/Users/natha/Git_Projects/renderer/build/CMakeFiles/edit_cache.dir
+C:/Users/natha/Git_Projects/renderer/build/CMakeFiles/rebuild_cache.dir
