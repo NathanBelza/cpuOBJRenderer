@@ -5,8 +5,6 @@
 #include "matrices.hpp"
 #include "screenRender.hpp"
 
-#include <iostream>
-
 point4D clipToScreenSpace(point4D clipVertex, size_t screenWidth, size_t screenHeight) {
     point4D screenPoint;
     screenPoint.x = screenWidth - (clipVertex.x + 1.0f) * screenWidth * 0.5f;
@@ -16,26 +14,15 @@ point4D clipToScreenSpace(point4D clipVertex, size_t screenWidth, size_t screenH
     return screenPoint;
 }
 
-bool transformVertexToClip(point4D &vertex, Camera &camera, float aspectRatio) {
-    std::array<float, 16> cameraToOriginM;
-    cameraToOrigin(camera, cameraToOriginM);
+bool transformVertexToClip(point4D &vertex, std::array<float, 16> matrix, Camera &camera, float aspectRatio) {
+    // vertex = matrixVectorMultiply(cameraToOriginM, vertex);
 
-    std::array<float, 16> cameraRotatePitchM;
-    cameraRotatePitch(camera, cameraRotatePitchM);
+    // vertex = matrixVectorMultiply(cameraRotateYawM, vertex);
 
-    std::array<float, 16> cameraRotateYawM;
-    cameraRotateYaw(camera, cameraRotateYawM);
+    // vertex = matrixVectorMultiply(cameraRotatePitchM, vertex);
 
-    std::array<float, 16> cameraToClipM;
-    cameraToClipSpace(camera, aspectRatio, cameraToClipM);
-
-    vertex = matrixVectorMultiply(cameraToOriginM, vertex);
-
-    vertex = matrixVectorMultiply(cameraRotateYawM, vertex);
-
-    vertex = matrixVectorMultiply(cameraRotatePitchM, vertex);
-
-    vertex = matrixVectorMultiply(cameraToClipM, vertex);
+    // vertex = matrixVectorMultiply(cameraToClipM, vertex);
+    vertex = matrixVectorMultiply(matrix, vertex);
 
     if(vertex.x > vertex.w || vertex.x < -vertex.w ||
        vertex.y > vertex.w || vertex.y < -vertex.w ||
@@ -47,7 +34,7 @@ bool transformVertexToClip(point4D &vertex, Camera &camera, float aspectRatio) {
     return FALSE;
 }
 
-void OnPaint(HDC hdc, size_t width, size_t height, std::vector<Gdiplus::ARGB> &imageArr)
+void OnPaint(HDC hdc, size_t width, size_t height, std::vector<Gdiplus::ARGB> &imageArr, Camera &camera)
 {
     Gdiplus::Graphics graphics(hdc);
     Gdiplus::Bitmap bitmap(width, height, PixelFormat32bppARGB);
@@ -95,8 +82,27 @@ void renderImage(Camera camera, std::vector<worldTriangle> triangles, size_t wid
         }
     }
 
+    float aspectRatio = static_cast<float> (width) / static_cast<float> (height);
+
+    std::array<float, 16> cameraToOriginM;
+    cameraToOrigin(camera, cameraToOriginM);
+
+    std::array<float, 16> cameraRotatePitchM;
+    cameraRotatePitch(camera, cameraRotatePitchM);
+
+    std::array<float, 16> cameraRotateYawM;
+    cameraRotateYaw(camera, cameraRotateYawM);
+
+    std::array<float, 16> cameraToClipM;
+    cameraToClipSpace(camera, aspectRatio, cameraToClipM);
+
+    std::array<float, 16> combinedM;
+    combinedM = matrixMultiply(cameraRotateYawM, cameraToOriginM);
+    combinedM = matrixMultiply(cameraRotatePitchM, combinedM);
+    combinedM = matrixMultiply(cameraToClipM, combinedM);
+
     for(auto& worldTri : triangles) {
-        screenTriangle screenTri(worldTri, camera, width, height);
+        screenTriangle screenTri(worldTri, camera, width, height, combinedM);
         if(screenTri.isCulled()) continue;
         Gdiplus::ARGB triangleColor = 0xFFFF0000;
         point4D normal = worldTri.getNormal();
@@ -120,32 +126,29 @@ void renderImage(Camera camera, std::vector<worldTriangle> triangles, size_t wid
     }
 }
 
-screenTriangle::screenTriangle(worldTriangle worldTri, Camera camera, float width, float height) {
+screenTriangle::screenTriangle(worldTriangle &worldTri, Camera &camera, float width, float height, std::array<float, 16> &matrix) {
     point4D normal = worldTri.getNormal();
     point4D cameraVec = camera.getViewVec();
 
-    //std::cout << cameraVec.x << ',' << cameraVec.y << ',' << cameraVec.z << '\n' << '\n';
-    //std::cout << normal.x * cameraVec.x + normal.y * cameraVec.y + normal.z * cameraVec.z << '\n' << '\n';
-
     if((normal.x * cameraVec.x + normal.y * cameraVec.y + normal.z * cameraVec.z) > 0.0f) { //Dot product for backface culling
-        culled = true;
+        culled = TRUE;
         return;
     }
 
-    float aspectRatio = static_cast<float> (width / height);
+    float aspectRatio = static_cast<float> (width) / static_cast<float> (height);
     point4D wA = worldTri.getAPos();
     point4D wB = worldTri.getBPos();
     point4D wC = worldTri.getCPos();
 
-    bool aClipped = transformVertexToClip(wA, camera, aspectRatio);
-    bool bClipped = transformVertexToClip(wB, camera, aspectRatio);
-    bool cClipped = transformVertexToClip(wC, camera, aspectRatio);
+    bool aClipped = transformVertexToClip(wA, matrix, camera, aspectRatio);
+    bool bClipped = transformVertexToClip(wB, matrix, camera, aspectRatio);
+    bool cClipped = transformVertexToClip(wC, matrix, camera, aspectRatio);
 
     if(aClipped  && bClipped && cClipped) {
-        culled = true;
+        culled = TRUE;
         return;
     }
-    culled = false;
+    culled = FALSE;
 
     wA.perspectiveDivide();
     wB.perspectiveDivide();

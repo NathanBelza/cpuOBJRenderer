@@ -140,7 +140,7 @@ class screenTriangle {
         CVector.y = a.y - c.y;
         culled = false;
     }
-    screenTriangle(worldTriangle worldTri, Camera camera, float width, float height);
+    screenTriangle(worldTriangle &worldTri, Camera &camera, float width, float height, std::array<float, 16> &matrix);
 
     bool checkPointInTriangle(float x, float y, float &depth) { //Check if a point is in the bounds of the triangle
         float u, v, w;
@@ -171,6 +171,6 @@ class screenTriangle {
 };
 
 void renderImage(Camera camera, std::vector<worldTriangle> triangles, size_t width, size_t height, std::vector<Gdiplus::ARGB> &imageArr, std::vector<float> &depthBuffer);
-void OnPaint(HDC hdc, size_t width, size_t height, std::vector<Gdiplus::ARGB> &imageArr);
+void OnPaint(HDC hdc, size_t width, size_t height, std::vector<Gdiplus::ARGB> &imageArr, Camera &camera);
 
 #endif

@@ -1,20 +1,20 @@
 [
 {
-  "directory": "C:/Users/natha/Git_Projects/renderer/build",
-  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe -IC:/Users/natha/Git_Projects/renderer/src -g -o CMakeFiles\\renderer.dir\\src\\main.cpp.obj -c C:\\Users\\natha\\Git_Projects\\renderer\\src\\main.cpp",
-  "file": "C:/Users/natha/Git_Projects/renderer/src/main.cpp",
-  "output": "C:/Users/natha/Git_Projects/renderer/build/CMakeFiles/renderer.dir/src/main.cpp.obj"
+  "directory": "C:/Users/Nathan/Git_Proj/GdiplusRenderer/build",
+  "command": "C:/msys64/ucrt64/bin/g++.exe  @CMakeFiles/renderer.dir/includes_CXX.rsp -g -o CMakeFiles/renderer.dir/src/main.cpp.obj -c C:/Users/Nathan/Git_Proj/GdiplusRenderer/src/main.cpp",
+  "file": "C:/Users/Nathan/Git_Proj/GdiplusRenderer/src/main.cpp",
+  "output": "CMakeFiles/renderer.dir/src/main.cpp.obj"
 },
 {
-  "directory": "C:/Users/natha/Git_Projects/renderer/build",
-  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe -IC:/Users/natha/Git_Projects/renderer/src -g -o CMakeFiles\\renderer.dir\\src\\screenRender.cpp.obj -c C:\\Users\\natha\\Git_Projects\\renderer\\src\\screenRender.cpp",
-  "file": "C:/Users/natha/Git_Projects/renderer/src/screenRender.cpp",
-  "output": "C:/Users/natha/Git_Projects/renderer/build/CMakeFiles/renderer.dir/src/screenRender.cpp.obj"
+  "directory": "C:/Users/Nathan/Git_Proj/GdiplusRenderer/build",
+  "command": "C:/msys64/ucrt64/bin/g++.exe  @CMakeFiles/renderer.dir/includes_CXX.rsp -g -o CMakeFiles/renderer.dir/src/screenRender.cpp.obj -c C:/Users/Nathan/Git_Proj/GdiplusRenderer/src/screenRender.cpp",
+  "file": "C:/Users/Nathan/Git_Proj/GdiplusRenderer/src/screenRender.cpp",
+  "output": "CMakeFiles/renderer.dir/src/screenRender.cpp.obj"
 },
 {
-  "directory": "C:/Users/natha/Git_Projects/renderer/build",
-  "command": "C:\\msys64\\ucrt64\\bin\\c++.exe -IC:/Users/natha/Git_Projects/renderer/src -g -o CMakeFiles\\renderer.dir\\src\\matrices.cpp.obj -c C:\\Users\\natha\\Git_Projects\\renderer\\src\\matrices.cpp",
-  "file": "C:/Users/natha/Git_Projects/renderer/src/matrices.cpp",
-  "output": "C:/Users/natha/Git_Projects/renderer/build/CMakeFiles/renderer.dir/src/matrices.cpp.obj"
+  "directory": "C:/Users/Nathan/Git_Proj/GdiplusRenderer/build",
+  "command": "C:/msys64/ucrt64/bin/g++.exe  @CMakeFiles/renderer.dir/includes_CXX.rsp -g -o CMakeFiles/renderer.dir/src/matrices.cpp.obj -c C:/Users/Nathan/Git_Proj/GdiplusRenderer/src/matrices.cpp",
+  "file": "C:/Users/Nathan/Git_Proj/GdiplusRenderer/src/matrices.cpp",
+  "output": "CMakeFiles/renderer.dir/src/matrices.cpp.obj"
 }
 ]

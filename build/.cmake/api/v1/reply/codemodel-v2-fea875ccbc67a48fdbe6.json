@@ -2,12 +2,11 @@
 	"configurations" : 
 	[
 		{
-			"abstractTargets" : [],
 			"directories" : 
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Debug-f6f22219c74102c3da70.json",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.10.0"
@@ -40,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "renderer::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-renderer-Debug-98c3e2a4d551ff07fc0e.json",
+					"jsonFile" : "target-renderer-Debug-52cf12f0943e0d64a7d7.json",
 					"name" : "renderer",
 					"projectIndex" : 0
 				}
@@ -50,12 +49,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/natha/Git_Projects/renderer/build",
-		"source" : "C:/Users/natha/Git_Projects/renderer"
+		"build" : "C:/Users/Nathan/Git_Proj/GdiplusRenderer/build",
+		"source" : "C:/Users/Nathan/Git_Proj/GdiplusRenderer"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 9
+		"minor" : 8
 	}
 }

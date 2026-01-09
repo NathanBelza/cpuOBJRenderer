@@ -4,7 +4,7 @@
 #include <array>
 #include "screenRender.hpp"
 
-void matrixMultiply(const std::array<float, 16> &A, const std::array<float, 16> &B, std::array<float, 16> &C);
+std::array<float, 16> matrixMultiply(const std::array<float, 16> &A, const std::array<float, 16> &B);
 
 point4D matrixVectorMultiply(const std::array<float, 16> &A, point4D V);
 

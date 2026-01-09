@@ -149,7 +149,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
 
         renderImage(camera, triangles, rect.right, rect.bottom, imageArray, depthBuffer);
 
-        OnPaint(hdc, rect.right, rect.bottom, imageArray);
+        OnPaint(hdc, rect.right, rect.bottom, imageArray, camera);
 
         EndPaint(hWnd, &ps);
         }

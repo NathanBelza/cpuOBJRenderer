@@ -46,11 +46,6 @@
 			}
 		]
 	},
-	"codemodelVersion" : 
-	{
-		"major" : 2,
-		"minor" : 9
-	},
 	"compileGroups" : 
 	[
 		{
@@ -64,7 +59,7 @@
 			[
 				{
 					"backtrace" : 3,
-					"path" : "C:/Users/natha/Git_Projects/renderer/src"
+					"path" : "C:/Users/Nathan/Git_Proj/GdiplusRenderer/src"
 				}
 			],
 			"language" : "CXX",
@@ -97,13 +92,6 @@
 		],
 		"language" : "CXX"
 	},
-	"linkLibraries" : 
-	[
-		{
-			"backtrace" : 2,
-			"fragment" : "gdiplus"
-		}
-	],
 	"name" : "renderer",
 	"nameOnDisk" : "renderer.exe",
 	"paths" : 

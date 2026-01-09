@@ -4,7 +4,8 @@
 
 size_t index(size_t col, size_t row) {return col + 4 * row;}
 
-void matrixMultiply(const std::array<float, 16> &A, const std::array<float, 16> &B, std::array<float, 16> &C) {
+std::array<float,16> matrixMultiply(const std::array<float, 16> &A, const std::array<float, 16> &B) {
+    std::array<float, 16> C;
     for(size_t row = 0; row < 4; row++) {
         for(size_t col = 0; col < 4; col++) {
             float sum = 0.0f;
@@ -14,6 +15,7 @@ void matrixMultiply(const std::array<float, 16> &A, const std::array<float, 16> 
             C[index(col,row)] = sum;
         }
     }
+    return C;
 }
 
 point4D matrixVectorMultiply(const std::array<float, 16> &A, point4D V) { //Confirmed works
