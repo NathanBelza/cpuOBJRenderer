@@ -5,23 +5,15 @@
 #include "matrices.hpp"
 #include "screenRender.hpp"
 
-point4D clipToScreenSpace(point4D clipVertex, size_t screenWidth, size_t screenHeight) {
+void clipToScreenSpace(point4D &clipVertex, size_t screenWidth, size_t screenHeight) {
     point4D screenPoint;
-    screenPoint.x = screenWidth - (clipVertex.x + 1.0f) * screenWidth * 0.5f;
-    screenPoint.y = screenHeight - (clipVertex.y + 1.0f) * screenHeight * 0.5f;
-    screenPoint.z = clipVertex.z;
-    screenPoint.w = clipVertex.w;
-    return screenPoint;
+    clipVertex.x = screenWidth - (clipVertex.x + 1.0f) * screenWidth * 0.5f;
+    clipVertex.y = screenHeight - (clipVertex.y + 1.0f) * screenHeight * 0.5f;
+    clipVertex.z = clipVertex.z;
+    clipVertex.w = clipVertex.w;
 }
 
 bool transformVertexToClip(point4D &vertex, std::array<float, 16> matrix, Camera &camera, float aspectRatio) {
-    // vertex = matrixVectorMultiply(cameraToOriginM, vertex);
-
-    // vertex = matrixVectorMultiply(cameraRotateYawM, vertex);
-
-    // vertex = matrixVectorMultiply(cameraRotatePitchM, vertex);
-
-    // vertex = matrixVectorMultiply(cameraToClipM, vertex);
     vertex = matrixVectorMultiply(matrix, vertex);
 
     if(vertex.x > vertex.w || vertex.x < -vertex.w ||
@@ -74,10 +66,10 @@ void OnPaint(HDC hdc, size_t width, size_t height, std::vector<Gdiplus::ARGB> &i
     graphics.DrawImage(&bitmap, 0, 0);
 }
 
-void renderImage(Camera camera, std::vector<worldTriangle> triangles, size_t width, size_t height, std::vector<Gdiplus::ARGB> &imageArr, std::vector<float> &depthBuffer) {
+void renderImage(Camera &camera, std::vector<worldTriangle> &triangles, size_t width, size_t height, std::vector<Gdiplus::ARGB> &imageArr, std::vector<float> &depthBuffer) {
     for(size_t y = 0; y < height; y++) {
         for(size_t x = 0; x < width; x++) {
-            imageArr[x + y * width] = 0xFFFFFFFF;
+            imageArr[x + y * width] = 0xFF000000;
             depthBuffer[x + y * width] = 1;
         }
     }
@@ -108,9 +100,9 @@ void renderImage(Camera camera, std::vector<worldTriangle> triangles, size_t wid
         point4D normal = worldTri.getNormal();
         triangleColor = Gdiplus::Color::MakeARGB(
             0xFF,
-            normal.x * 255,
-            normal.y * 255,
-            normal.z
+            0xFF * normal.x,
+            0x00 * normal.y,
+            0x00 * normal.z
         );
         
         for(size_t y = 0; y < height; y++) {
@@ -136,13 +128,13 @@ screenTriangle::screenTriangle(worldTriangle &worldTri, Camera &camera, float wi
     }
 
     float aspectRatio = static_cast<float> (width) / static_cast<float> (height);
-    point4D wA = worldTri.getAPos();
-    point4D wB = worldTri.getBPos();
-    point4D wC = worldTri.getCPos();
+    this->A = worldTri.getAPos();
+    this->B = worldTri.getBPos();
+    this->C = worldTri.getCPos();
 
-    bool aClipped = transformVertexToClip(wA, matrix, camera, aspectRatio);
-    bool bClipped = transformVertexToClip(wB, matrix, camera, aspectRatio);
-    bool cClipped = transformVertexToClip(wC, matrix, camera, aspectRatio);
+    bool aClipped = transformVertexToClip(A, matrix, camera, aspectRatio);
+    bool bClipped = transformVertexToClip(B, matrix, camera, aspectRatio);
+    bool cClipped = transformVertexToClip(C, matrix, camera, aspectRatio);
 
     if(aClipped  && bClipped && cClipped) {
         culled = TRUE;
@@ -150,20 +142,13 @@ screenTriangle::screenTriangle(worldTriangle &worldTri, Camera &camera, float wi
     }
     culled = FALSE;
 
-    wA.perspectiveDivide();
-    wB.perspectiveDivide();
-    wC.perspectiveDivide();
+    A.perspectiveDivide();
+    B.perspectiveDivide();
+    C.perspectiveDivide();
 
-    A = clipToScreenSpace(wA, width, height);
-    B = clipToScreenSpace(wB, width, height);
-    C = clipToScreenSpace(wC, width, height);
-
-    AVector.x = B.x - A.x; //Create vectors around edges of triangle
-    AVector.y = B.y - A.y;
-    BVector.x = C.x - B.x;
-    BVector.y = C.y - B.y;
-    CVector.x = A.x - C.x;
-    CVector.y = A.y - C.y;
+    clipToScreenSpace(A, width, height);
+    clipToScreenSpace(B, width, height);
+    clipToScreenSpace(C, width, height);
 }
 
 bool Camera::updateCameraPos(HWND hWnd, UINT Message, USHORT VKey) {

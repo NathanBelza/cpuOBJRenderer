@@ -93,15 +93,6 @@ class worldTriangle {
     private:
     point4D A, B, C; //Vertecies
     point4D normalVector;
-
-    point4D crossProduct(point4D A, point4D B) {
-        point4D C;
-        C.x = A.y * B.z - A.z * B.y;
-        C.y = A.z * B.x - A.x * B.z;
-        C.z = A.x * B.y - A.y * B.x;
-        C.w = 1;
-        return C;
-    }
     public:
     worldTriangle(point4D a, point4D b, point4D c) {
         A = a;
@@ -112,19 +103,27 @@ class worldTriangle {
         C.w = 1;
         point4D AB(A, B);
         point4D AC(A, C);
-        normalVector = crossProduct(AB, AC);
+        normalVector = _crossProduct(AB, AC);
         normalVector.normalize();
     }
     point4D getAPos() const {return A;}
     point4D getBPos() const {return B;}
     point4D getCPos() const {return C;}
     point4D getNormal() const {return normalVector;}
+    private:
+    point4D _crossProduct(point4D A, point4D B) {
+        point4D C;
+        C.x = A.y * B.z - A.z * B.y;
+        C.y = A.z * B.x - A.x * B.z;
+        C.z = A.x * B.y - A.y * B.x;
+        C.w = 1;
+        return C;
+    }
 };
 
 class screenTriangle {
     private:
     point4D A, B, C; //Vertecies
-    point4D AVector, BVector, CVector;
     bool culled;
 
     public:
@@ -132,12 +131,6 @@ class screenTriangle {
         A = a;
         B = b;
         C = c;
-        AVector.x = b.x - a.x; //Create vectors around edges of triangle
-        AVector.y = b.y - a.y;
-        BVector.x = c.x - b.x;
-        BVector.y = c.y - b.y;
-        CVector.x = a.x - c.x;
-        CVector.y = a.y - c.y;
         culled = false;
     }
     screenTriangle(worldTriangle &worldTri, Camera &camera, float width, float height, std::array<float, 16> &matrix);
@@ -170,7 +163,7 @@ class screenTriangle {
     }
 };
 
-void renderImage(Camera camera, std::vector<worldTriangle> triangles, size_t width, size_t height, std::vector<Gdiplus::ARGB> &imageArr, std::vector<float> &depthBuffer);
+void renderImage(Camera &camera, std::vector<worldTriangle> &triangles, size_t width, size_t height, std::vector<Gdiplus::ARGB> &imageArr, std::vector<float> &depthBuffer);
 void OnPaint(HDC hdc, size_t width, size_t height, std::vector<Gdiplus::ARGB> &imageArr, Camera &camera);
 
 #endif

@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include "screenRender.hpp"
+#include "readObj.hpp"
 #pragma comment (lib,"Gdiplus.lib")
 
 constexpr UINT_PTR IDT_TIMER1 = 1;
@@ -68,16 +69,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow) {
 
     WindowData* windowData = new WindowData (camera, triangleArray);
 
-    point4D a1(1,0,0,1);
-    point4D b1(0,1,0,1);
-    point4D c1(0,0,1,1);
-    worldTriangle tri1(a1,b1,c1);
-    windowData->triangleArray.push_back(tri1);
-    point4D a2(-1,0,0,1);
-    point4D b2(0,0,1,1);
-    point4D c2(0,1,0,1);
-    worldTriangle tri2(a2,b2,c2);
-    windowData->triangleArray.push_back(tri2);
+    objToTriangles("monkey", windowData->triangleArray);
 
     hWnd = CreateWindow(
         TEXT("GettingStarted"),   // window class name
@@ -92,7 +84,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow) {
         hInstance,                // program instance handle
         windowData);  // creation parameters
 
-        SetTimer(hWnd, IDT_TIMER1, 17, (TIMERPROC) NULL);
+        SetTimer(hWnd, IDT_TIMER1, 170, (TIMERPROC) NULL);
 
     ShowWindow(hWnd, iCmdShow);
     UpdateWindow(hWnd);

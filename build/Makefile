@@ -177,6 +177,30 @@ src/matrices.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/renderer.dir/build.make CMakeFiles/renderer.dir/src/matrices.cpp.s
 .PHONY : src/matrices.cpp.s
 
+src/readObj.obj: src/readObj.cpp.obj
+.PHONY : src/readObj.obj
+
+# target to build an object file
+src/readObj.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/renderer.dir/build.make CMakeFiles/renderer.dir/src/readObj.cpp.obj
+.PHONY : src/readObj.cpp.obj
+
+src/readObj.i: src/readObj.cpp.i
+.PHONY : src/readObj.i
+
+# target to preprocess a source file
+src/readObj.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/renderer.dir/build.make CMakeFiles/renderer.dir/src/readObj.cpp.i
+.PHONY : src/readObj.cpp.i
+
+src/readObj.s: src/readObj.cpp.s
+.PHONY : src/readObj.s
+
+# target to generate assembly for a file
+src/readObj.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/renderer.dir/build.make CMakeFiles/renderer.dir/src/readObj.cpp.s
+.PHONY : src/readObj.cpp.s
+
 src/screenRender.obj: src/screenRender.cpp.obj
 .PHONY : src/screenRender.obj
 
@@ -216,6 +240,9 @@ help:
 	@echo "... src/matrices.obj"
 	@echo "... src/matrices.i"
 	@echo "... src/matrices.s"
+	@echo "... src/readObj.obj"
+	@echo "... src/readObj.i"
+	@echo "... src/readObj.s"
 	@echo "... src/screenRender.obj"
 	@echo "... src/screenRender.i"
 	@echo "... src/screenRender.s"

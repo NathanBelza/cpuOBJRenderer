@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/Nathan/Git_Proj/GdiplusRenderer/src/main.cpp" "CMakeFiles/renderer.dir/src/main.cpp.obj" "gcc" "CMakeFiles/renderer.dir/src/main.cpp.obj.d"
   "C:/Users/Nathan/Git_Proj/GdiplusRenderer/src/matrices.cpp" "CMakeFiles/renderer.dir/src/matrices.cpp.obj" "gcc" "CMakeFiles/renderer.dir/src/matrices.cpp.obj.d"
+  "C:/Users/Nathan/Git_Proj/GdiplusRenderer/src/readObj.cpp" "CMakeFiles/renderer.dir/src/readObj.cpp.obj" "gcc" "CMakeFiles/renderer.dir/src/readObj.cpp.obj.d"
   "C:/Users/Nathan/Git_Proj/GdiplusRenderer/src/screenRender.cpp" "CMakeFiles/renderer.dir/src/screenRender.cpp.obj" "gcc" "CMakeFiles/renderer.dir/src/screenRender.cpp.obj.d"
   )
 

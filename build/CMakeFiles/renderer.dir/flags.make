@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = @CMakeFiles/renderer.dir/includes_CXX.rsp
 
-CXX_FLAGS = -g
+CXX_FLAGS = -g -std=gnu++20
 

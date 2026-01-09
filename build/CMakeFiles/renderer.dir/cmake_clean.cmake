@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/renderer.dir/src/main.cpp.obj.d"
   "CMakeFiles/renderer.dir/src/matrices.cpp.obj"
   "CMakeFiles/renderer.dir/src/matrices.cpp.obj.d"
+  "CMakeFiles/renderer.dir/src/readObj.cpp.obj"
+  "CMakeFiles/renderer.dir/src/readObj.cpp.obj.d"
   "CMakeFiles/renderer.dir/src/screenRender.cpp.obj"
   "CMakeFiles/renderer.dir/src/screenRender.cpp.obj.d"
   "bin/renderer.exe"

@@ -117,11 +117,27 @@ CMakeFiles/renderer.dir/src/matrices.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/renderer.dir/src/matrices.cpp.s"
 	C:/msys64/ucrt64/bin/g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:/Users/Nathan/Git_Proj/GdiplusRenderer/src/matrices.cpp -o CMakeFiles/renderer.dir/src/matrices.cpp.s
 
+CMakeFiles/renderer.dir/src/readObj.cpp.obj: CMakeFiles/renderer.dir/flags.make
+CMakeFiles/renderer.dir/src/readObj.cpp.obj: CMakeFiles/renderer.dir/includes_CXX.rsp
+CMakeFiles/renderer.dir/src/readObj.cpp.obj: C:/Users/Nathan/Git_Proj/GdiplusRenderer/src/readObj.cpp
+CMakeFiles/renderer.dir/src/readObj.cpp.obj: CMakeFiles/renderer.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:/Users/Nathan/Git_Proj/GdiplusRenderer/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/renderer.dir/src/readObj.cpp.obj"
+	C:/msys64/ucrt64/bin/g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/renderer.dir/src/readObj.cpp.obj -MF CMakeFiles/renderer.dir/src/readObj.cpp.obj.d -o CMakeFiles/renderer.dir/src/readObj.cpp.obj -c C:/Users/Nathan/Git_Proj/GdiplusRenderer/src/readObj.cpp
+
+CMakeFiles/renderer.dir/src/readObj.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/renderer.dir/src/readObj.cpp.i"
+	C:/msys64/ucrt64/bin/g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:/Users/Nathan/Git_Proj/GdiplusRenderer/src/readObj.cpp > CMakeFiles/renderer.dir/src/readObj.cpp.i
+
+CMakeFiles/renderer.dir/src/readObj.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/renderer.dir/src/readObj.cpp.s"
+	C:/msys64/ucrt64/bin/g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:/Users/Nathan/Git_Proj/GdiplusRenderer/src/readObj.cpp -o CMakeFiles/renderer.dir/src/readObj.cpp.s
+
 # Object files for target renderer
 renderer_OBJECTS = \
 "CMakeFiles/renderer.dir/src/main.cpp.obj" \
 "CMakeFiles/renderer.dir/src/screenRender.cpp.obj" \
-"CMakeFiles/renderer.dir/src/matrices.cpp.obj"
+"CMakeFiles/renderer.dir/src/matrices.cpp.obj" \
+"CMakeFiles/renderer.dir/src/readObj.cpp.obj"
 
 # External object files for target renderer
 renderer_EXTERNAL_OBJECTS =
@@ -129,10 +145,11 @@ renderer_EXTERNAL_OBJECTS =
 bin/renderer.exe: CMakeFiles/renderer.dir/src/main.cpp.obj
 bin/renderer.exe: CMakeFiles/renderer.dir/src/screenRender.cpp.obj
 bin/renderer.exe: CMakeFiles/renderer.dir/src/matrices.cpp.obj
+bin/renderer.exe: CMakeFiles/renderer.dir/src/readObj.cpp.obj
 bin/renderer.exe: CMakeFiles/renderer.dir/build.make
 bin/renderer.exe: CMakeFiles/renderer.dir/linkLibs.rsp
 bin/renderer.exe: CMakeFiles/renderer.dir/objects1.rsp
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:/Users/Nathan/Git_Proj/GdiplusRenderer/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable bin/renderer.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:/Users/Nathan/Git_Proj/GdiplusRenderer/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable bin/renderer.exe"
 	"C:/Program Files/CMake/bin/cmake.exe" -E rm -f CMakeFiles/renderer.dir/objects.a
 	C:/msys64/ucrt64/bin/ar.exe qc CMakeFiles/renderer.dir/objects.a @CMakeFiles/renderer.dir/objects1.rsp
 	C:/msys64/ucrt64/bin/g++.exe -g -Wl,--whole-archive CMakeFiles/renderer.dir/objects.a -Wl,--no-whole-archive -o bin/renderer.exe -Wl,--out-implib,librenderer.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles/renderer.dir/linkLibs.rsp
