@@ -46,7 +46,6 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow) {
     wndClass.lpszMenuName   = NULL;
     wndClass.lpszClassName  = TEXT("GettingStarted");
 
-
     RegisterClass(&wndClass);
     RAWINPUTDEVICE rawInput[2];
 

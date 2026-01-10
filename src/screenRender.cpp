@@ -165,6 +165,13 @@ screenTriangle::screenTriangle(worldTriangle &worldTri, Camera &camera, float wi
     triBottom = static_cast<int> (ceil(std::max({A.y, B.y, C.y})));
     triLeft = static_cast<int> (floor(std::min({A.x, B.x, C.x})));
     triRight = static_cast<int> (ceil(std::max({A.x, B.x, C.x})));
+
+    v0x = B.x - A.x;
+    v0y = B.y - A.y;
+    v1x = C.x - A.x;
+    v1y = C.y - A.y;
+
+    detInverse = 1 / (v0x * v1y - v0y * v1x);
 }
 
 bool Camera::updateCameraPos(HWND hWnd, UINT Message, USHORT VKey) {

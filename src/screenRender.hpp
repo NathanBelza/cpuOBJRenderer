@@ -127,6 +127,8 @@ class screenTriangle {
     point4D A, B, C; //Vertecies
     bool culled;
     int triTop, triBottom, triLeft, triRight;
+    float v0x, v0y, v1x, v1y;
+    float detInverse;
 
     public:
     screenTriangle(point4D a, point4D b, point4D c) {
@@ -138,6 +140,13 @@ class screenTriangle {
         triBottom = static_cast<int> (ceil(std::max({A.y, B.y, C.y})));
         triLeft = static_cast<int> (floor(std::min({A.x, B.x, C.x})));
         triRight = static_cast<int> (ceil(std::max({A.x, B.x, C.x})));
+
+        v0x = B.x - A.x;
+        v0y = B.y - A.y;
+        v1x = C.x - A.x;
+        v1y = C.y - A.y;
+
+        detInverse = 1 / (v0x * v1y - v0y * v1x);
     }
     screenTriangle(worldTriangle &worldTri, Camera &camera, float width, float height, std::array<float, 16> &matrix);
 
@@ -158,15 +167,8 @@ class screenTriangle {
 
     private:
     void _findBarycentric(float Px, float Py, float &u, float &v, float &w) {
-        float v0x = B.x - A.x;
-        float v0y = B.y - A.y;
-        float v1x = C.x - A.x;
-        float v1y = C.y - A.y;
         float v2x = Px - A.x;
         float v2y = Py - A.y;
-
-        float detInverse = 1 / (v0x * v1y - v0y * v1x);
-
         v = detInverse * (v1y * v2x - v1x * v2y);
         w = detInverse * (-v0y * v2x + v0x * v2y);
         u = 1 - v - w;
