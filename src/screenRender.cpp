@@ -101,9 +101,9 @@ void renderImage(Camera &camera, std::vector<worldTriangle> &triangles, size_t w
         point4D normal = worldTri.getNormal();
         triangleColor = Gdiplus::Color::MakeARGB(
             0xFF,
-            0xFF * normal.x,
-            0xFF * normal.y,
-            0xFF * normal.z
+            static_cast<BYTE> (0xFF * (normal.x+1)/2),
+            static_cast<BYTE> (0xFF * (normal.y+1)/2),
+            static_cast<BYTE> (0xFF * (normal.z+1)/2)
         );
 
         int triTop = screenTri.getTop();
@@ -131,7 +131,7 @@ void renderImage(Camera &camera, std::vector<worldTriangle> &triangles, size_t w
 
 screenTriangle::screenTriangle(worldTriangle &worldTri, Camera &camera, float width, float height, std::array<float, 16> &matrix) {
     point4D normal = worldTri.getNormal();
-    point4D cameraVec = camera.getViewVec();
+    point4D cameraVec(camera.getPos(), worldTri.getAPos());
 
     if((normal.x * cameraVec.x + normal.y * cameraVec.y + normal.z * cameraVec.z) > 0.0f) { //Dot product for backface culling
         culled = TRUE;
