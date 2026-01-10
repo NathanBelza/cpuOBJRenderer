@@ -2,6 +2,7 @@
 #include <gdiplus.h>
 #include <array>
 #include <vector>
+#include <algorithm>
 #include "matrices.hpp"
 #include "screenRender.hpp"
 
@@ -101,12 +102,22 @@ void renderImage(Camera &camera, std::vector<worldTriangle> &triangles, size_t w
         triangleColor = Gdiplus::Color::MakeARGB(
             0xFF,
             0xFF * normal.x,
-            0x00 * normal.y,
-            0x00 * normal.z
+            0xFF * normal.y,
+            0xFF * normal.z
         );
-        
-        for(size_t y = 0; y < height; y++) {
-            for(size_t x = 0; x < width; x++) {
+
+        int triTop = screenTri.getTop();
+        int triBottom = screenTri.getBottom();
+        int triLeft = screenTri.getLeft();
+        int triRight = screenTri.getRight();
+
+        triTop = std::clamp(triTop, 0, static_cast<int> (height-1));
+        triBottom = std::clamp(triBottom, 0, static_cast<int> (height-1));
+        triLeft = std::clamp(triLeft, 0, static_cast<int> (width-1));
+        triRight = std::clamp(triRight, 0, static_cast<int> (width-1));
+
+        for(int y = triTop; y <= triBottom; y++) {
+            for(int x = triLeft; x <= triRight; x++) {
                 float depth;
                 bool pointInTriangle = screenTri.checkPointInTriangle(x + 0.5f, y + 0.5f, depth);
                 if(pointInTriangle == TRUE && depth < depthBuffer[x + width * y]) {
@@ -149,6 +160,11 @@ screenTriangle::screenTriangle(worldTriangle &worldTri, Camera &camera, float wi
     clipToScreenSpace(A, width, height);
     clipToScreenSpace(B, width, height);
     clipToScreenSpace(C, width, height);
+
+    triTop = static_cast<int> (floor(std::min({A.y, B.y, C.y})));
+    triBottom = static_cast<int> (ceil(std::max({A.y, B.y, C.y})));
+    triLeft = static_cast<int> (floor(std::min({A.x, B.x, C.x})));
+    triRight = static_cast<int> (ceil(std::max({A.x, B.x, C.x})));
 }
 
 bool Camera::updateCameraPos(HWND hWnd, UINT Message, USHORT VKey) {

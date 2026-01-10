@@ -84,7 +84,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow) {
         hInstance,                // program instance handle
         windowData);  // creation parameters
 
-        SetTimer(hWnd, IDT_TIMER1, 170, (TIMERPROC) NULL);
+        SetTimer(hWnd, IDT_TIMER1, 17, (TIMERPROC) NULL);
 
     ShowWindow(hWnd, iCmdShow);
     UpdateWindow(hWnd);

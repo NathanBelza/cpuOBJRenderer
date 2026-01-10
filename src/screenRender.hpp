@@ -5,6 +5,7 @@
 #include <gdiplus.h>
 #include <cmath>
 #include <vector>
+#include <algorithm>
 
 struct point4D {
     float x, y, z, w;
@@ -125,13 +126,18 @@ class screenTriangle {
     private:
     point4D A, B, C; //Vertecies
     bool culled;
+    int triTop, triBottom, triLeft, triRight;
 
     public:
     screenTriangle(point4D a, point4D b, point4D c) {
+        culled = false;
         A = a;
         B = b;
         C = c;
-        culled = false;
+        triTop = static_cast<int> (floor(std::min({A.y, B.y, C.y})));
+        triBottom = static_cast<int> (ceil(std::max({A.y, B.y, C.y})));
+        triLeft = static_cast<int> (floor(std::min({A.x, B.x, C.x})));
+        triRight = static_cast<int> (ceil(std::max({A.x, B.x, C.x})));
     }
     screenTriangle(worldTriangle &worldTri, Camera &camera, float width, float height, std::array<float, 16> &matrix);
 
@@ -144,7 +150,11 @@ class screenTriangle {
         if(u > 0 && v > 0 && w > 0) return true;
         else return false;
     }
-    bool isCulled() {return culled;}
+    bool isCulled() const {return culled;}
+    int getTop() const {return triTop;}
+    int getBottom() const {return triBottom;}
+    int getLeft() const {return triLeft;}
+    int getRight() const {return triRight;}
 
     private:
     void _findBarycentric(float Px, float Py, float &u, float &v, float &w) {
