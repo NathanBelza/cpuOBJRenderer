@@ -1,7 +1,0 @@
-# ninja log v7
-5	1109	7892004016560312	CMakeFiles/renderer.dir/main.cpp.obj	f5d4fd487a10bdaf
-35	161	7891988113841962	renderer.exe	7a5ba9d7b393620c
-1280	1417	7896142810542331	bin/renderer.exe	84ee5705dc2a8310
-58	1279	7896142798313824	CMakeFiles/renderer.dir/src/main.cpp.obj	d0601554354999b0
-51	1294	7896142310453826	CMakeFiles/renderer.dir/src/screenRender.cpp.obj	c7b5a8e76cc2fa3d
-44	1065	7896141784954684	CMakeFiles/renderer.dir/src/matrices.cpp.obj	fc35c86deeb2d094

@@ -68,7 +68,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow) {
 
     WindowData* windowData = new WindowData (camera, triangleArray);
 
-    objToTriangles("monkey", windowData->triangleArray);
+    objToTriangles("model", windowData->triangleArray);
 
     hWnd = CreateWindow(
         TEXT("GettingStarted"),   // window class name
@@ -81,7 +81,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow) {
         NULL,                     // parent window handle
         NULL,                     // window menu handle
         hInstance,                // program instance handle
-        windowData);  // creation parameters
+        windowData);              // window data
 
         SetTimer(hWnd, IDT_TIMER1, 17, (TIMERPROC) NULL);
 

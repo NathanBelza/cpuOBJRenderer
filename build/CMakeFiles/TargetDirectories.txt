@@ -1,3 +1,0 @@
-C:/Users/Nathan/Git_Proj/GdiplusRenderer/build/CMakeFiles/renderer.dir
-C:/Users/Nathan/Git_Proj/GdiplusRenderer/build/CMakeFiles/edit_cache.dir
-C:/Users/Nathan/Git_Proj/GdiplusRenderer/build/CMakeFiles/rebuild_cache.dir
