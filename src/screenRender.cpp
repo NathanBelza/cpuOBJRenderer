@@ -6,14 +6,16 @@
 #include "matrices.hpp"
 #include "screenRender.hpp"
 
+// Convert clip space coordinates to screen space coordinates
 void clipToScreenSpace(point4D &clipVertex, size_t screenWidth, size_t screenHeight) {
-    point4D screenPoint;
     clipVertex.x = screenWidth - (clipVertex.x + 1.0f) * screenWidth * 0.5f;
     clipVertex.y = screenHeight - (clipVertex.y + 1.0f) * screenHeight * 0.5f;
     clipVertex.z = clipVertex.z;
     clipVertex.w = clipVertex.w;
 }
 
+// Transforms a vertex in world space to clip space
+// Returns true if vertex is clipped, else returns false
 bool transformVertexToClip(point4D &vertex, std::array<float, 16> matrix, Camera &camera, float aspectRatio) {
     vertex = matrixVectorMultiply(matrix, vertex);
 
@@ -27,8 +29,7 @@ bool transformVertexToClip(point4D &vertex, std::array<float, 16> matrix, Camera
     return FALSE;
 }
 
-void OnPaint(HDC hdc, size_t width, size_t height, std::vector<Gdiplus::ARGB> &imageArr, Camera &camera)
-{
+void OnPaint(HDC hdc, size_t width, size_t height, std::vector<Gdiplus::ARGB> &imageArr, Camera &camera) {
     Gdiplus::Graphics graphics(hdc);
     Gdiplus::Bitmap bitmap(width, height, PixelFormat32bppARGB);
     Gdiplus::BitmapData bitmapData;
@@ -67,10 +68,12 @@ void OnPaint(HDC hdc, size_t width, size_t height, std::vector<Gdiplus::ARGB> &i
     graphics.DrawImage(&bitmap, 0, 0);
 }
 
-void renderImage(Camera &camera, std::vector<worldTriangle> &triangles, size_t width, size_t height, std::vector<Gdiplus::ARGB> &imageArr, std::vector<float> &depthBuffer) {
+void renderImage(Camera &camera, std::vector<worldTriangle> &triangles, size_t width, size_t height,
+                 std::vector<Gdiplus::ARGB> &imageArr, std::vector<float> &depthBuffer) {
+
     for(size_t y = 0; y < height; y++) {
         for(size_t x = 0; x < width; x++) {
-            imageArr[x + y * width] = 0xFF000000;
+            imageArr[x + y * width] = 0xFF000000; // Clear imageArr and depthBuffer
             depthBuffer[x + y * width] = 1;
         }
     }
@@ -97,9 +100,10 @@ void renderImage(Camera &camera, std::vector<worldTriangle> &triangles, size_t w
     for(auto& worldTri : triangles) {
         screenTriangle screenTri(worldTri, camera, width, height, combinedM);
         if(screenTri.isCulled()) continue;
+
         Gdiplus::ARGB triangleColor = 0xFFFF0000;
         point4D normal = worldTri.getNormal();
-        triangleColor = Gdiplus::Color::MakeARGB(
+        triangleColor = Gdiplus::Color::MakeARGB( // Set face colour depending on normal vector direction
             0xFF,
             static_cast<BYTE> (0xFF * (normal.x+1)/2),
             static_cast<BYTE> (0xFF * (normal.y+1)/2),
@@ -116,7 +120,7 @@ void renderImage(Camera &camera, std::vector<worldTriangle> &triangles, size_t w
         triLeft = std::clamp(triLeft, 0, static_cast<int> (width-1));
         triRight = std::clamp(triRight, 0, static_cast<int> (width-1));
 
-        for(int y = triTop; y <= triBottom; y++) {
+        for(int y = triTop; y <= triBottom; y++) { // Check pixels within bounding box if in triangle
             for(int x = triLeft; x <= triRight; x++) {
                 float depth;
                 bool pointInTriangle = screenTri.checkPointInTriangle(x + 0.5f, y + 0.5f, depth);
@@ -129,7 +133,9 @@ void renderImage(Camera &camera, std::vector<worldTriangle> &triangles, size_t w
     }
 }
 
-screenTriangle::screenTriangle(worldTriangle &worldTri, Camera &camera, float width, float height, std::array<float, 16> &matrix) {
+screenTriangle::screenTriangle(worldTriangle &worldTri, Camera &camera,
+                               float width, float height, std::array<float, 16> &matrix) {
+
     point4D normal = worldTri.getNormal();
     point4D cameraVec(camera.getPos(), worldTri.getAPos());
 
@@ -139,9 +145,9 @@ screenTriangle::screenTriangle(worldTriangle &worldTri, Camera &camera, float wi
     }
 
     float aspectRatio = static_cast<float> (width) / static_cast<float> (height);
-    this->A = worldTri.getAPos();
-    this->B = worldTri.getBPos();
-    this->C = worldTri.getCPos();
+    A = worldTri.getAPos();
+    B = worldTri.getBPos();
+    C = worldTri.getCPos();
 
     bool aClipped = transformVertexToClip(A, matrix, camera, aspectRatio);
     bool bClipped = transformVertexToClip(B, matrix, camera, aspectRatio);
@@ -177,29 +183,29 @@ screenTriangle::screenTriangle(worldTriangle &worldTri, Camera &camera, float wi
 bool Camera::updateCameraPos(HWND hWnd, UINT Message, USHORT VKey) {
     if(Message != WM_KEYDOWN) return FALSE;
     switch(VKey) {
-        case VK_SPACE:
+        case VK_SPACE: // Increase y height when space pressed
             yPos += 0.1f;
             return TRUE;
-        case VK_SHIFT:
+        case VK_SHIFT: // Decrease y height when shift pressed
             yPos += -0.1f;
             return TRUE;
         case 0x57: //W
-            zPos += 0.1f * cos(yaw); //add units in camera yaw direction
+            zPos += 0.1f * cos(yaw); //add units in camera yaw direction in zx plane
             xPos += 0.1f * sin(yaw);
             return TRUE;
         case 0x53: //S
-            zPos += 0.1f * -cos(yaw); //subtract units in camera yaw direction
+            zPos += 0.1f * -cos(yaw); //subtract units in camera yaw direction in zx plane
             xPos += 0.1f * -sin(yaw);
             return TRUE;
         case 0x41: //A
-            zPos += 0.1f * -sin(yaw);
+            zPos += 0.1f * -sin(yaw); // add units perpendicular to yaw in zx plane
             xPos += 0.1f * cos(yaw);
             return TRUE;
         case 0x44: //D
-            zPos += 0.1f * sin(yaw);
+            zPos += 0.1f * sin(yaw); // subtract units perpendicular to yaw in zx plane
             xPos += 0.1f * -cos(yaw);
             return TRUE;
-        case VK_ESCAPE:
+        case VK_ESCAPE: // Toggle enable/disable cursor
             {
             CURSORINFO cursorInfo;
             cursorInfo.cbSize = sizeof(cursorInfo);

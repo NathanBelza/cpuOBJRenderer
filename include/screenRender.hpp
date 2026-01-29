@@ -36,12 +36,13 @@ struct point4D {
 class Camera {
     private:
     float xPos, yPos, zPos;
-    float pitch, yaw, roll; //implement roll later
+    float pitch, yaw, roll; // TODO: implement roll later
     float pitchTemp, yawTemp;
     float fov;
     float nearPlaneDist, farPlaneDist;
     point4D cameraViewVec;
     public:
+    // Initialize camera with position, view angle, and fov settings
     Camera(float _xPos, float _yPos, float _zPos,
         float _pitch, float _yaw, float _roll,
         float _fov, float _nearPlaneDist, float _farPlaneDist) :
@@ -64,37 +65,43 @@ class Camera {
     float getYawR() const {return yaw;}
     float getPitchR() const {return pitch;}
     float getFovR() const {return fov;}
+    float getFovD() const {return fov * (180.0f/M_PI);}
     float getNear() const {return nearPlaneDist;}
     float getFar() const {return farPlaneDist;}
     point4D getViewVec() const {return cameraViewVec;}
+    // FOV stored internally in radians, input degrees
     void setFov(float _fov) {fov = _fov * (M_PI/180.0f);}
     void setNear(float _nearPlaneDist) {nearPlaneDist = _nearPlaneDist;}
     void setFar(float _farPlaneDist) {farPlaneDist = _farPlaneDist;}
 
+    // Updates the viewing angle depending on the raw mouse positon deltas
     void updateViewAngle(LONG deltaX, LONG deltaY) {
-        yawTemp = yaw + -deltaX / 250.0f;
-        pitchTemp = pitch + -deltaY / 250.0f;
+        yawTemp = yaw + -deltaX / 250.0f; // Divide by 250 to decrease sensitivity
+        pitchTemp = pitch + -deltaY / 250.0f; // TODO: add sensitivity control to camera
         yawTemp = fmodf(yawTemp, 2 * M_PI);
         if(yawTemp < 0) yawTemp += 2 * M_PI;
-        if(pitchTemp > M_PI_2) pitchTemp = M_PI_2;
+        if(pitchTemp > M_PI_2) pitchTemp = M_PI_2; // Lock the pitch between +- 90 degrees
         if(pitchTemp < -M_PI_2) pitchTemp = -M_PI_2;
         yaw = yawTemp;
         pitch = pitchTemp;
 
-        cameraViewVec.x = cos(pitch) * sin(yaw);
+        cameraViewVec.x = cos(pitch) * sin(yaw); // Set camera view vector depending on new view position
         cameraViewVec.y = sin(pitch);
         cameraViewVec.z = cos(pitch) * cos(yaw);
         cameraViewVec.w = 1;
     }
 
+    // Update camera data depending on key pressed
     bool updateCameraPos(HWND hWnd, UINT Message, USHORT VKey);
 };
 
 class worldTriangle {
     private:
-    point4D A, B, C; //Vertecies
+    point4D A, B, C; // Vertecies in world space, counterclockwise
     point4D normalVector;
     public:
+    // Construct a worldTriangle from three verticies, and
+    // find the normal vector
     worldTriangle(point4D a, point4D b, point4D c) {
         A = a;
         A.w = 1;
@@ -124,10 +131,10 @@ class worldTriangle {
 
 class screenTriangle {
     private:
-    point4D A, B, C; //Vertecies
+    point4D A, B, C; //Vertecies of triangle in 2D screen space
     bool culled;
-    int triTop, triBottom, triLeft, triRight;
-    float v0x, v0y, v1x, v1y;
+    int triTop, triBottom, triLeft, triRight; // Bounding box of triangle
+    float v0x, v0y, v1x, v1y; // Vectors for solving barycentric coordinates
     float detInverse;
 
     public:
@@ -146,18 +153,23 @@ class screenTriangle {
         v1x = C.x - A.x;
         v1y = C.y - A.y;
 
-        detInverse = 1 / (v0x * v1y - v0y * v1x);
+        detInverse = 1 / (v0x * v1y - v0y * v1x); // Compute detInverse here for faster barycentric coordinates
     }
+    //Construct a screenTriangle from the world triangle, camera data, and screen data
     screenTriangle(worldTriangle &worldTri, Camera &camera, float width, float height, std::array<float, 16> &matrix);
 
-    bool checkPointInTriangle(float x, float y, float &depth) { //Check if a point is in the bounds of the triangle
+    // Check if a point is in the bounds of the triangle, and compute depth for z-buffering
+    // Returns true if pixel is inside triangle
+    bool checkPointInTriangle(float x, float y, float &depth) {
         float u, v, w;
         _findBarycentric(x, y, u, v, w);
 
         depth = u * A.z + v * B.z + w * C.z;
 
-        if(u > 0 && v > 0 && w > 0) return true;
-        else return false;
+        if(u > 0 && v > 0 && w > 0) {
+            return true;
+        }
+        return false;
     }
     bool isCulled() const {return culled;}
     int getTop() const {return triTop;}
@@ -166,6 +178,7 @@ class screenTriangle {
     int getRight() const {return triRight;}
 
     private:
+    // Compute the barycentric coordinates of the point (Px, Py) in screen space
     void _findBarycentric(float Px, float Py, float &u, float &v, float &w) {
         float v2x = Px - A.x;
         float v2y = Py - A.y;
@@ -175,7 +188,9 @@ class screenTriangle {
     }
 };
 
+// Load the rendered frame into imageArr
 void renderImage(Camera &camera, std::vector<worldTriangle> &triangles, size_t width, size_t height, std::vector<Gdiplus::ARGB> &imageArr, std::vector<float> &depthBuffer);
+// Paint the imageArr buffer to the screen
 void OnPaint(HDC hdc, size_t width, size_t height, std::vector<Gdiplus::ARGB> &imageArr, Camera &camera);
 
 #endif

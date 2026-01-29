@@ -4,8 +4,10 @@
 #include <array>
 #include "screenRender.hpp"
 
+// Multiply two nxn matricies, returns the combined nxn matrix
 std::array<float, 16> matrixMultiply(const std::array<float, 16> &A, const std::array<float, 16> &B);
 
+// Multiply an nxn matrix by an nx1 vector, returns nx1 vector
 point4D matrixVectorMultiply(const std::array<float, 16> &A, point4D V);
 
 void cameraToOrigin(Camera &camera, std::array<float, 16> &A);

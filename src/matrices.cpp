@@ -18,7 +18,7 @@ std::array<float,16> matrixMultiply(const std::array<float, 16> &A, const std::a
     return C;
 }
 
-point4D matrixVectorMultiply(const std::array<float, 16> &A, point4D V) { //Confirmed works
+point4D matrixVectorMultiply(const std::array<float, 16> &A, point4D V) {
     point4D _V;
     _V.x = A[0] * V.x + A[1] * V.y + A[2] * V.z + A[3] * V.w;
     _V.y = A[4] * V.x + A[5] * V.y + A[6] * V.z + A[7] * V.w;

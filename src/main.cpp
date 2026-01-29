@@ -16,8 +16,8 @@ struct WindowData {
     std::vector<float> depthBuffer;
     size_t width;
     size_t height;
-    WindowData(Camera _camera,
-               std::vector<worldTriangle> _triangleArray)
+    WindowData(const Camera _camera,
+               const std::vector<worldTriangle> _triangleArray)
                : camera(_camera),
                triangleArray(_triangleArray) {}
 };
@@ -61,13 +61,16 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow) {
 
     RegisterRawInputDevices(rawInput, ARRAYSIZE(rawInput), sizeof(rawInput[0]));
 
+    // Create camera object at (0,0,5), looking down -Z direction
     Camera camera(0,0,5,
                   0,180,0,
                   80,0.5,100);
-    std::vector<worldTriangle> triangleArray;
+    std::vector<worldTriangle> triangleArray; // Create vector to hold worldTriangles
 
     WindowData* windowData = new WindowData (camera, triangleArray);
 
+    // To render an image, .obj file must have name model.obj,
+    // and be in the same directory as the executable.
     objToTriangles("model", windowData->triangleArray);
 
     hWnd = CreateWindow(
@@ -83,6 +86,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow) {
         hInstance,                // program instance handle
         windowData);              // window data
 
+        // Set timer for approximately 60 FPS
         SetTimer(hWnd, IDT_TIMER1, 17, (TIMERPROC) NULL);
 
     ShowWindow(hWnd, iCmdShow);
@@ -111,6 +115,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
         WindowData* windowData = reinterpret_cast<WindowData*> (GetWindowLongPtr(hWnd, GWLP_USERDATA));
         auto& imageArray = windowData->imageArray;
         auto& depthBuffer = windowData->depthBuffer;
+
         RECT rect;
         GetClientRect(hWnd, &rect);
         windowData->width = rect.right;
@@ -129,7 +134,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
         auto& imageArray = windowData->imageArray;
         auto& depthBuffer = windowData->depthBuffer;
 
-        RECT rect;
+        RECT rect; // Update image size
         GetClientRect(hWnd, &rect);
         if(windowData->width != rect.right || windowData->height != rect.bottom) {
             imageArray.resize(rect.right * rect.bottom);
@@ -150,7 +155,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
         WindowData* windowData = reinterpret_cast<WindowData*> (GetWindowLongPtr(hWnd, GWLP_USERDATA));
         Camera &camera = windowData->camera;
 
-        UINT dwSize = sizeof(RAWINPUT);
+        UINT dwSize = sizeof(RAWINPUT); // Load raw input message
         static BYTE lpb[sizeof(RAWINPUT)];
         GetRawInputData(reinterpret_cast<HRAWINPUT> (lParam), RID_INPUT, lpb, &dwSize, sizeof(RAWINPUTHEADER));
         RAWINPUT* raw = reinterpret_cast<RAWINPUT*> (lpb);

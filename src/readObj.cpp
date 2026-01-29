@@ -13,7 +13,7 @@ void objToTriangles(std::string filename, std::vector<worldTriangle> &triangleAr
     std::vector<point4D> vertex;
     std::string line;
     while(std::getline(model, line)) {
-        if(line.starts_with("v ")) {
+        if(line.starts_with("v ")) { // Load all vertecies into vector
             point4D vTemp;
             char prefix;
             std::istringstream ss(line);
@@ -21,7 +21,7 @@ void objToTriangles(std::string filename, std::vector<worldTriangle> &triangleAr
             ss >> prefix >> vTemp.x >> vTemp.y >> vTemp.z;
             vTemp.w = 1;
             vertex.push_back(vTemp);
-        } else if(line.starts_with("f ")) {
+        } else if(line.starts_with("f ")) { // Load vertex vector into worldTriangle vector
             int vertA, vertB, vertC;
             char prefix;
             std::istringstream ss(line);
